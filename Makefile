@@ -1,31 +1,17 @@
-#export THEOS=/var/mobile/theos
+# Настройки платформы под современные iOS
+TARGET = iphone:clang:latest:15.0
 ARCHS = arm64
-#Add arm64e if it needed
-DEBUG = 0
-FINALPACKAGE = 1
-FOR_RELEASE = 1
-THEOS_PACKAGE_SCHEME = rootless
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = 34306jit
-#If you want to change TWEAK_NAME just change up here. It will automatically change these below, don't need to change it by hand anymore!
+# Имя твоего будущего файла меню
+TWEAK_NAME = icedcave
 
-$(TWEAK_NAME)_FRAMEWORKS =  UIKit Foundation Security QuartzCore CoreGraphics CoreText  AVFoundation Accelerate GLKit SystemConfiguration GameController
+# Какие файлы компилировать
+icedcave_FILES = ImGuiDrawView.mm $(wildcard IMGUI/*.cpp)
 
-$(TWEAK_NAME)_CCFLAGS = -std=c++11 -fno-rtti -fno-exceptions -DNDEBUG
-$(TWEAK_NAME)_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-value
+# Подключение системных графических движков Apple
+icedcave_FRAMEWORKS = UIKit Foundation Metal MetalKit
+icedcave_CFLAGS = -fobjc-arc -I./IMGUI -DIMGUI_IMPL_METAL_CPP
 
-#Add dobby hook
-$(TWEAK_NAME)_OBJ_FILES = 5Toubun/libdobby.a
-
-$(TWEAK_NAME)_FILES = ImGuiDrawView.mm $(wildcard Esp/*.mm) $(wildcard Esp/*.m) $(wildcard IMGUI/*.cpp) $(wildcard IMGUI/*.mm)
-
-
-
-#$(TWEAK_NAME)_LIBRARIES += substrate
-# GO_EASY_ON_ME = 1
-
-include $(THEOS_MAKE_PATH)/tweak.mk
-
-
+include $(THEOS)/makefiles/tweak.mk
