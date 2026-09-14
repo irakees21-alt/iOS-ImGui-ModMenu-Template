@@ -12,9 +12,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup Theos Framework
+    - name: Setup Theos via Direct Zip
       run: |
-        git clone --recursive https://github.com $HOME/theos
+        curl -LO https://github.com
+        unzip master.zip -d $HOME
+        mv $HOME/theos-master $HOME/theos
         curl -LO https://github.com
         unzip master.zip -d $HOME
         mv $HOME/sdks-master/*.sdk $HOME/theos/sdks
