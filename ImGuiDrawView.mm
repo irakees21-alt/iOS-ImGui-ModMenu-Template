@@ -9,7 +9,7 @@
 // دالة جلب مسار ذاكرة اللعبة (قاعدة البيانات الأساسية)
 uintptr_t getRealOffset(uintptr_t offset) {
     return _dyld_get_image_header(0) + offset;
-}
+} 
 
 // دالة الحماية والتمويه - تعمل تلقائياً بالخلفية فور تشغيل اللعبة دون إظهار أي منيو
 __attribute__((constructor)) static void initialize_silent_patches() {
