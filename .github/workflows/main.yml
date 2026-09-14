@@ -1,0 +1,38 @@
+name: Build Silent Tweak dylib
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Theos Framework
+      run: |
+        git clone --recursive https://github.com $HOME/theos
+        curl -LO https://github.com
+        unzip master.zip -d $HOME
+        mv $HOME/sdks-master/*.sdk $HOME/theos/sdks
+        rm -r master.zip $HOME/sdks-master
+
+    - name: Compile Silent dylib
+      run: |
+        export THEOS=$HOME/theos
+        make package FINALPACKAGE=1 ALWAYS_CLEAN=1
+      env:
+        THEOS: /Users/runner/theos
+
+    - name: Upload Finished dylib
+      uses: actions/upload-artifact@v4
+      with:
+        name: ElIraqi-Silent-dylib
+        path: |
+          .theos/obj/debug/*.dylib
+          .theos/obj/*.dylib
+          *.dylib
+          **/*.dylib
